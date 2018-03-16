@@ -14,6 +14,15 @@
 #include "hal.h"
 #include <stdio.h>
 
+#include <STM32Sleep.h>
+#include <RTClock.h>
+
+RTClock rt_c(RTCSEL_LSE);
+long int alarmDelay = 50;
+
+#include <libmaple/pwr.h>
+#include <libmaple/scb.h>
+
 // -----------------------------------------------------------------------------
 // I/O
 
@@ -77,15 +86,13 @@ static void hal_io_check() {
 static const SPISettings settings(10E6, MSBFIRST, SPI_MODE0);
 
 static void hal_spi_init () {
-    SPI.begin();
+	SPI.begin();
+	SPI.setBitOrder(MSBFIRST); // Set the SPI_1 bit order
+	SPI.setDataMode(SPI_MODE0); //Set the  SPI_2 data mode 0
+	SPI.setClockDivider(SPI_CLOCK_DIV16);      // Slow speed (72 / 16 = 4.5 MHz SPI_1 speed)
 }
 
 void hal_pin_nss (u1_t val) {
-    if (!val)
-        SPI.beginTransaction(settings);
-    else
-        SPI.endTransaction();
-
     //Serial.println(val?">>":"<<");
     digitalWrite(lmic_pins.nss, val);
 }
@@ -202,7 +209,7 @@ void hal_enableIRQs () {
 }
 
 void hal_sleep () {
-    // Not implemented
+    sleepAndWakeUp(STANDBY, &rt_c, alarmDelay);
 }
 
 // -----------------------------------------------------------------------------
