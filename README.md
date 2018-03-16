@@ -1,3 +1,11 @@
+Fork Requirements
+=================
+This fork adds an additional dependency STM-Sleep.
+Clone from here: https://github.com/chacal/stm32sleep
+Note: remember to rename stm32sleep to STM32sleep.
+
+Add both this repository and STM32sleep to the arduino libraries folder.
+
 Arduino-LMIC library
 ====================
 This repository contains the IBM LMIC (LoraMAC-in-C) library, slightly
